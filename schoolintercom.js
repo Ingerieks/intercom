@@ -1,28 +1,37 @@
-const recordbutton = document.getElementById("record_play");
-recordbutton.innerText = recordbutton.textContent = 'Click to record';
+const recordPlayButton = document.getElementById("record_play");
 
-const sendbutton = document.getElementById("send");
-sendbutton.innerText = sendbutton.textContent = 'Send to';
+const sendButton = document.getElementById("send");
 
-const cancelbutton = document.getElementById("cancel");
-cancelbutton.innerText = cancelbutton.textContent = 'Cancel';
+const cancelButton = document.getElementById("cancel");
 
-document.getElementById("send").disabled = true;
-document.getElementById("cancel").disabled = true;
 
-function onClick() {
-    var click = document.getElementById("record_play");
-    if (click.innerHTML === "Click to record") {
-        click.innerHTML = "Recording...";
-    } else {
-        click.innerHTML = "Play";
+enterReadyToRecordState();
+
+function enterReadyToRecordState() {
+    recordPlayButton.innerText = recordPlayButton.textContent = 'Click to record';
+    recordPlayButton.onclick = function () {
+        enterRecordingState();
+    }
+    document.getElementById("send").style.display = "none"
+    document.getElementById("cancel").style.display = "none"
+}
+
+function enterRecordingState() {
+    recordPlayButton.innerText = recordPlayButton.textContent = 'Stop';
+    recordPlayButton.onclick = function () {
+        enterRecordedState();
     }
 }
 
+function enterRecordedState() {
+    recordPlayButton.innerText = recordPlayButton.textContent = 'Play';
+    document.getElementById("cancel").style.display = "block"
+    document.getElementById("send").style.display = "block"
+    sendButton.innerText = sendButton.textContent = 'Send';
+    cancelButton.innerText = cancelButton.textContent = 'Cancel';
+}
 
 
-document.getElementById("send").disabled = false;
-    document.getElementById("cancel").disabled = false;
 navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
         const mediaRecorder = new MediaRecorder(stream);
