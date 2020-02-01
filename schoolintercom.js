@@ -19,56 +19,64 @@ function enterReadyToRecordState() {
 function enterRecordingState() {
     recordPlayButton.innerText = recordPlayButton.textContent = 'Stop';
     recordPlayButton.onclick = function () {
-        enterRecordedState();
+
+        const mediaRecorder = startRecording();
+
     }
 }
 
-function enterRecordedState() {
+function enterRecordedState(mediaRecorder) {
     recordPlayButton.innerText = recordPlayButton.textContent = 'Play';
+    
     document.getElementById("cancel").style.display = "block"
     document.getElementById("send").style.display = "block"
+   
+    mediaRecorder.stop();
+   
     sendButton.innerText = sendButton.textContent = 'Send';
     cancelButton.innerText = cancelButton.textContent = 'Cancel';
     
-    cancelButton.onclick = function() {
+    cancelButton.onclick = function () {
         enterReadyToRecordState();
     }
 
-    sendButton.onclick = function() {
+    sendButton.onclick = function () {
         enterReadyToRecordState();
     }
 
-    recordPlayButton.onclick = function() {
+    recordPlayButton.onclick = function () {
         enterRecordedState();
     }
 }
 
 
+function startRecording() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            const mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start();
 
-navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(stream => {
-        const mediaRecorder = new MediaRecorder(stream);
-        //mediaRecorder.start();
+            const audioChunks = [];
 
-        const audioChunks = [];
-
-        mediaRecorder.addEventListener("dataavailable", event => {
-            audioChunks.push(event.data);
+            mediaRecorder.addEventListener("dataavailable", event => {
+                audioChunks.push(event.data);
+            });
+            
+            enterRecordedState(mediaRecorder);
         });
+};
 
+/*mediaRecorder.addEventListener("stop", () => {
+    const audioBlob = new Blob(audioChunks);
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const audio = new Audio(audioUrl);
+    audio.play();
 
-        mediaRecorder.addEventListener("stop", () => {
-            const audioBlob = new Blob(audioChunks);
-            const audioUrl = URL.createObjectURL(audioBlob);
-            const audio = new Audio(audioUrl);
-            audio.play();
+});
 
-        });
-
-        setTimeout(() => {
-            mediaRecorder.stop();
-        }, 3000);
-    });
+setTimeout(() => {
+    mediaRecorder.stop();
+});*/
 
 
 /*state: ready to record
