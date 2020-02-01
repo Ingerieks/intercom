@@ -1,4 +1,77 @@
-const recordPlayButton = document.getElementById("record_play");
+
+recordPlayButton = document.getElementById("record_play");
+
+const fsm = new machina.Fsm({
+
+    namespace: "test",
+
+    initialState: "readyToRecord",
+
+    states: {
+        readyToRecord: {
+            _onEnter: function () {
+                console.log('entering off');
+                recordPlayButton.innerText = recordPlayButton.textContent = 'Click to record';
+            },
+
+            clickRecordPlay: function () {
+                this.transition( "recording" );
+            },
+            _onExit: function () {
+                console.log('exiting off');
+            },
+        },
+        recording: {
+            _onEnter: function () {
+                console.log('entering on')
+                recordPlayButton.innerText = recordPlayButton.textContent = 'Recording';
+            },
+
+            clickRecordPlay: function () {
+                this.transition( "recorded" );
+
+            },
+            
+            _onExit: function () {
+                console.log('exiting on');
+            }
+        },
+        recorded: {
+            _onEnter: function () {
+                console.log('entering on')
+                recordPlayButton.innerText = recordPlayButton.textContent = 'Play';
+            },
+
+            recordPlayButton: function () {
+                this.transition( "recorded" );
+            },
+            
+            _onExit: function () {
+                console.log('exiting on');
+            }
+        },
+    }
+});
+
+
+setTimeout(() => {
+    fsm.handle('clickRecordPlay');
+    setTimeout(() => {
+        fsm.handle('clickRecordPlay');
+        setTimeout(() => {
+            fsm.handle('clickRecordPlay');
+        }, 3000);
+    }, 3000);
+}, 3000);
+
+
+
+
+
+
+
+
+/*const recordPlayButton = document.getElementById("record_play");
 
 const sendButton = document.getElementById("send");
 
@@ -64,7 +137,9 @@ function startRecording() {
             
             enterRecordedState(mediaRecorder);
         });
-};
+};*/
+
+
 
 /*mediaRecorder.addEventListener("stop", () => {
     const audioBlob = new Blob(audioChunks);
