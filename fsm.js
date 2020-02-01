@@ -10,8 +10,8 @@ const fsm = new machina.Fsm({
             _onEnter: function () {
                 console.log('entering off');
             },
-            toggle: function () {
-                console.log('toggled when off')
+            toggle: function (kleur) {
+                console.log('toggled when off', kleur)
                 this.transition( "on" );
             },
             _onExit: function () {
@@ -24,12 +24,11 @@ const fsm = new machina.Fsm({
                 console.log('entering on')
             },
 
-            toggle: function () {
-                console.log('toggled when on')
+            toggle: function (kleur) {
+                console.log('toggled when on', kleur)
                 this.transition( "off" );
             },
-            // _onExit is a special handler that is invoked just before
-            // the FSM leaves the current state and transitions to another
+            
             _onExit: function () {
                 console.log('exiting on');
             }
@@ -37,12 +36,13 @@ const fsm = new machina.Fsm({
     }
 });
 
+
 setTimeout(() => {
-    fsm.handle('toggle');
+    fsm.handle('toggle', 'pienk');
     setTimeout(() => {
-        fsm.handle('toggle');
+        fsm.handle('toggle', 'blou');
         setTimeout(() => {
-            fsm.handle('toggle');
+            fsm.handle('toggle', 'groen');
         }, 3000);
     }, 3000);
 }, 3000);
