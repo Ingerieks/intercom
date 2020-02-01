@@ -1,5 +1,7 @@
 
-recordPlayButton = document.getElementById("record_play");
+const recordPlayButton = document.getElementById("record_play");
+const sendButton = document.getElementById("send");
+const cancelButton = document.getElementById("cancel");
 
 const fsm = new machina.Fsm({
 
@@ -12,26 +14,34 @@ const fsm = new machina.Fsm({
             _onEnter: function () {
                 console.log('entering off');
                 recordPlayButton.innerText = recordPlayButton.textContent = 'Click to record';
+                
+                document.getElementById("send").style.display = "none"
+                document.getElementById("cancel").style.display = "none"
             },
 
-            clickRecordPlay: function () {
-                this.transition( "recording" );
+            recordStarted: function (mediaRecorder) {
+                console.log('recordingStarted', mediaRecorder);
+                this.transition("recording", mediaRecorder);
             },
+
+
             _onExit: function () {
                 console.log('exiting off');
             },
         },
         recording: {
-            _onEnter: function () {
-                console.log('entering on')
-                recordPlayButton.innerText = recordPlayButton.textContent = 'Recording';
+            _onEnter: function (mediaRecorder) {
+                console.log('entering recording', mediaRecorder)
+                recordPlayButton.innerText = recordPlayButton.textContent = 'Stop';
+                
+                document.getElementById("send").style.display = "none"
+                document.getElementById("cancel").style.display = "none"
             },
 
             clickRecordPlay: function () {
-                this.transition( "recorded" );
-
+                this.transition("recorded");
             },
-            
+
             _onExit: function () {
                 console.log('exiting on');
             }
@@ -40,29 +50,53 @@ const fsm = new machina.Fsm({
             _onEnter: function () {
                 console.log('entering on')
                 recordPlayButton.innerText = recordPlayButton.textContent = 'Play';
+                
+                document.getElementById("send").style.display = "block"
+                document.getElementById("cancel").style.display = "block"
+                
+                sendButton.innerText = sendButton.textContent = 'Send';
+                cancelButton.innerText = cancelButton.textContent = 'Cancel';
+
             },
 
             recordPlayButton: function () {
-                this.transition( "recorded" );
+                this.transition("recorded");
             },
-            
+
             _onExit: function () {
                 console.log('exiting on');
             }
         },
     }
 });
+ 
+recordPlayButton.onclick = function () {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                const mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
+    
+                const audioChunks = [];
+    
+                mediaRecorder.addEventListener("dataavailable", event => {
+                    audioChunks.push(event.data);
+                });
+                
+                fsm.handle('recordStarted', mediaRecorder);
+            
+            });
+
+}
+
+cancelButton.onclick = function () {
+    fsm.handle('clickCancel');
+}
+
+sendButton.onclick = function () {
+    fsm.handle('clickSend');
+}
 
 
-setTimeout(() => {
-    fsm.handle('clickRecordPlay');
-    setTimeout(() => {
-        fsm.handle('clickRecordPlay');
-        setTimeout(() => {
-            fsm.handle('clickRecordPlay');
-        }, 3000);
-    }, 3000);
-}, 3000);
 
 
 
@@ -100,15 +134,15 @@ function enterRecordingState() {
 
 function enterRecordedState(mediaRecorder) {
     recordPlayButton.innerText = recordPlayButton.textContent = 'Play';
-    
+
     document.getElementById("cancel").style.display = "block"
     document.getElementById("send").style.display = "block"
-   
+
     mediaRecorder.stop();
-   
+
     sendButton.innerText = sendButton.textContent = 'Send';
     cancelButton.innerText = cancelButton.textContent = 'Cancel';
-    
+
     cancelButton.onclick = function () {
         enterReadyToRecordState();
     }
@@ -134,7 +168,7 @@ function startRecording() {
             mediaRecorder.addEventListener("dataavailable", event => {
                 audioChunks.push(event.data);
             });
-            
+
             enterRecordedState(mediaRecorder);
         });
 };*/
