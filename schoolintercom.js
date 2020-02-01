@@ -29,7 +29,20 @@ function enterRecordedState() {
     document.getElementById("send").style.display = "block"
     sendButton.innerText = sendButton.textContent = 'Send';
     cancelButton.innerText = cancelButton.textContent = 'Cancel';
+    
+    cancelButton.onclick = function() {
+        enterReadyToRecordState();
+    }
+
+    sendButton.onclick = function() {
+        enterReadyToRecordState();
+    }
+
+    recordPlayButton.onclick = function() {
+        enterRecordedState();
+    }
 }
+
 
 
 navigator.mediaDevices.getUserMedia({ audio: true })
