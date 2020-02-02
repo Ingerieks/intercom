@@ -12,48 +12,85 @@ const fsm = new machina.Fsm({
     states: {
         readyToRecord: {
             _onEnter: function () {
-                console.log('entering off');
+                console.log('entering readyToRecord');
                 recordPlayButton.innerText = recordPlayButton.textContent = 'Click to record';
-                
+
                 document.getElementById("send").style.display = "none"
                 document.getElementById("cancel").style.display = "none"
             },
 
+            clickRecordPlay: function () {
+                console.log('in readyToRecord received clickRecordPlay');
+
+                this.transition("startingRecorder");
+            },
+
+            _onExit: function () {
+                console.log('exiting readyToRecord');
+            },
+        },
+        startingRecorder: {
+            _onEnter: function () {
+                console.log('entering startingRecorder');
+
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(stream => {
+                        const mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.start();
+
+                        const audioChunks = [];
+
+                        mediaRecorder.addEventListener("dataavailable", event => {
+                            audioChunks.push(event.data);
+                        });
+
+                        this.mediaRecorder = mediaRecorder;
+
+                        fsm.handle('recordStarted');
+
+                    });
+            },
+
             recordStarted: function (mediaRecorder) {
+
                 console.log('recordingStarted', mediaRecorder);
+
                 this.transition("recording", mediaRecorder);
             },
 
-
             _onExit: function () {
-                console.log('exiting off');
+                console.log('exiting startingRecorder');
             },
         },
         recording: {
             _onEnter: function (mediaRecorder) {
                 console.log('entering recording', mediaRecorder)
                 recordPlayButton.innerText = recordPlayButton.textContent = 'Stop';
-                
+
                 document.getElementById("send").style.display = "none"
                 document.getElementById("cancel").style.display = "none"
             },
 
             clickRecordPlay: function () {
+               
+                this.mediaRecorder.stop();
+
                 this.transition("recorded");
+
             },
 
             _onExit: function () {
-                console.log('exiting on');
+                console.log('exiting recording');
             }
         },
         recorded: {
             _onEnter: function () {
-                console.log('entering on')
+                console.log('entering recorded')
                 recordPlayButton.innerText = recordPlayButton.textContent = 'Play';
-                
+
                 document.getElementById("send").style.display = "block"
                 document.getElementById("cancel").style.display = "block"
-                
+
                 sendButton.innerText = sendButton.textContent = 'Send';
                 cancelButton.innerText = cancelButton.textContent = 'Cancel';
 
@@ -64,27 +101,14 @@ const fsm = new machina.Fsm({
             },
 
             _onExit: function () {
-                console.log('exiting on');
+                console.log('exiting recorded');
             }
         },
     }
 });
- 
+
 recordPlayButton.onclick = function () {
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
-                const mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.start();
-    
-                const audioChunks = [];
-    
-                mediaRecorder.addEventListener("dataavailable", event => {
-                    audioChunks.push(event.data);
-                });
-                
-                fsm.handle('recordStarted', mediaRecorder);
-            
-            });
+    fsm.handle('clickRecordPlay')
 
 }
 
