@@ -17,6 +17,10 @@ const fsm = new machina.Fsm({
 
                 document.getElementById("send").style.display = "none"
                 document.getElementById("cancel").style.display = "none"
+
+                this.mediaRecorder = undefined;
+                this.audioChunks = undefined;
+                this.audio = undefined;
             },
 
             clickRecordPlay: function () {
@@ -38,10 +42,10 @@ const fsm = new machina.Fsm({
                         const mediaRecorder = new MediaRecorder(stream);
                         mediaRecorder.start();
 
-                        const audioChunks = [];
+                        this.audioChunks = [];
 
                         mediaRecorder.addEventListener("dataavailable", event => {
-                            audioChunks.push(event.data);
+                            this.audioChunks.push(event.data);
                         });
 
                         this.mediaRecorder = mediaRecorder;
@@ -72,15 +76,42 @@ const fsm = new machina.Fsm({
             },
 
             clickRecordPlay: function () {
-               
+
+                console.log('In recording, received clickRecordPlay')
+
+                this.mediaRecorder.addEventListener("stop", () => {
+                    const audioBlob = new Blob(this.audioChunks);
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    this.audio = new Audio(audioUrl);
+
+                    this.handle("stopped");
+
+                });
+
                 this.mediaRecorder.stop();
 
-                this.transition("recorded");
+                this.transition("stopping");
 
             },
 
             _onExit: function () {
                 console.log('exiting recording');
+            }
+        },
+        stopping: {
+            _onEnter: function () {
+                console.log('entering stopping')
+            },
+
+            stopped: function () {
+
+                console.log('In stopping, received stopped')
+                this.transition("recorded");
+
+            },
+
+            _onExit: function () {
+                console.log('exiting stopping');
             }
         },
         recorded: {
@@ -96,8 +127,14 @@ const fsm = new machina.Fsm({
 
             },
 
-            recordPlayButton: function () {
-                this.transition("recorded");
+            clickRecordPlay: function () {
+                console.log('In recorded, received clickRecordPlay')
+                this.audio.play();
+
+            },
+
+            clickCancel: function () {
+                this.transition("readyToRecord");
             },
 
             _onExit: function () {
@@ -114,6 +151,7 @@ recordPlayButton.onclick = function () {
 
 cancelButton.onclick = function () {
     fsm.handle('clickCancel');
+
 }
 
 sendButton.onclick = function () {
