@@ -1,10 +1,4 @@
-
-jQuery(function($) {
-    $(document).ready(function() {
-    $('.navbar').stickUp();
-    });
-    });
-    
+   
 
 const recordPlayButton = document.getElementById("record_play");
 const sendButton = document.getElementById("send");
