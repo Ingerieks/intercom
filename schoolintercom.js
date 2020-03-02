@@ -22,6 +22,7 @@ const fsm = new machina.Fsm({
                 this.mediaRecorder = undefined;
                 this.audioChunks = undefined;
                 this.audio = undefined;
+                this.audioBlob = undefined;
             },
 
             clickRecordPlay: function () {
@@ -81,8 +82,8 @@ const fsm = new machina.Fsm({
                 console.log('In recording, received clickRecordPlay')
 
                 this.mediaRecorder.addEventListener("stop", () => {
-                    const audioBlob = new Blob(this.audioChunks);
-                    const audioUrl = URL.createObjectURL(audioBlob);
+                    this.audioBlob = new Blob(this.audioChunks);
+                    const audioUrl = URL.createObjectURL(this.audioBlob);
                     this.audio = new Audio(audioUrl);
 
                     this.handle("stopped");
@@ -140,7 +141,28 @@ const fsm = new machina.Fsm({
 
             _onExit: function () {
                 console.log('exiting recorded');
-            }
+            },
+            
+            clickSend: function () {
+              
+                const fd = new FormData();
+                      fd.append('fname', 'test.wav');
+                      fd.append('data', this.audioBlob);
+                $.ajax({
+                      type: 'POST',
+                      url: 'http://localhost:3000/tracks',
+                      data: fd,
+                      processData: false,
+                      contentType: false
+                  }).done(function(data) {
+                     console.log(data);
+
+                     fsm.transition("readyToRecord");
+                  });
+
+            },
+            
+            
         },
     }
 });
@@ -167,88 +189,6 @@ sendButton.onclick = function () {
 
 
 
-
-/*const recordPlayButton = document.getElementById("record_play");
-
-const sendButton = document.getElementById("send");
-
-const cancelButton = document.getElementById("cancel");
-
-
-enterReadyToRecordState();
-
-function enterReadyToRecordState() {
-    recordPlayButton.innerText = recordPlayButton.textContent = 'Click to record';
-    recordPlayButton.onclick = function () {
-        enterRecordingState();
-    }
-    document.getElementById("send").style.display = "none"
-    document.getElementById("cancel").style.display = "none"
-}
-
-function enterRecordingState() {
-    recordPlayButton.innerText = recordPlayButton.textContent = 'Stop';
-    recordPlayButton.onclick = function () {
-
-        const mediaRecorder = startRecording();
-
-    }
-}
-
-function enterRecordedState(mediaRecorder) {
-    recordPlayButton.innerText = recordPlayButton.textContent = 'Play';
-
-    document.getElementById("cancel").style.display = "block"
-    document.getElementById("send").style.display = "block"
-
-    mediaRecorder.stop();
-
-    sendButton.innerText = sendButton.textContent = 'Send';
-    cancelButton.innerText = cancelButton.textContent = 'Cancel';
-
-    cancelButton.onclick = function () {
-        enterReadyToRecordState();
-    }
-
-    sendButton.onclick = function () {
-        enterReadyToRecordState();
-    }
-
-    recordPlayButton.onclick = function () {
-        enterRecordedState();
-    }
-}
-
-
-function startRecording() {
-    navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
-            const mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.start();
-
-            const audioChunks = [];
-
-            mediaRecorder.addEventListener("dataavailable", event => {
-                audioChunks.push(event.data);
-            });
-
-            enterRecordedState(mediaRecorder);
-        });
-};*/
-
-
-
-/*mediaRecorder.addEventListener("stop", () => {
-    const audioBlob = new Blob(audioChunks);
-    const audioUrl = URL.createObjectURL(audioBlob);
-    const audio = new Audio(audioUrl);
-    audio.play();
-
-});
-
-setTimeout(() => {
-    mediaRecorder.stop();
-});*/
 
 
 /*state: ready to record
