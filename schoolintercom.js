@@ -147,7 +147,7 @@ const fsm = new machina.Fsm({
               
                 const fd = new FormData();
                       fd.append('fname', 'test.wav');
-                      fd.append('data', this.audioBlob);
+                      fd.append('audio', this.audioBlob);
                 $.ajax({
                       type: 'POST',
                       url: 'http://localhost:3000/tracks',
