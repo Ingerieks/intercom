@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "http-server": "^0.12.3",
     "machina": "^4.0.2"
   }
 }
