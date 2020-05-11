@@ -1,4 +1,4 @@
-   
+
 /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
 function myFunction() {
   var x = document.getElementById("myTopnav");
@@ -11,14 +11,23 @@ function myFunction() {
 
 const playButton = document.getElementById("play_button");
 
-      playButton.innerText = playButton.textContent = 'No new messages';
+playButton.innerText = playButton.textContent = 'No new messages';
 
-$.get( "http://localhost:3000/tracks/new", function( tracks ) {
-   console.log(tracks);
-   tracks.forEach(track => { 
-     (new Audio()).play;
-   });
-   
+const api = "http://localhost:3000";
+
+$.get(api + "/tracks/new", function (tracks) {
+  
+  tracks.forEach(track => {
+    console.log(track);
+    var sound = document.createElement('audio');
+    sound.id = 'audio-player';
+    sound.controls = 'controls';
+    sound.src = api + track.url;
+    sound.type = 'audio/mpeg';
+    document.getElementById('player-container').appendChild(sound);
+    console.log(sound);
+  });
+
 });
 
 
