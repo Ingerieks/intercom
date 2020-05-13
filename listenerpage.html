@@ -1,56 +1,44 @@
 <html lang="en">
 
 <head>
- 
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="listenerpage.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&display=swap" rel="stylesheet">
-    <title>schoolintercom</title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="listenerpage.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&display=swap" rel="stylesheet">
+  <title>schoolintercom</title>
 
 </head>
 
 <body>
-<div class="topnav" id="myTopnav">
-  <a href="#login" class="active">Login</a>
-  <a href="#news">News</a>
-  <a href="#contact">Contact</a>
-  <div class="dropdown">
-    <button class="dropbtn">Send to
-      <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-content">
-      <a href="#">Link 1</a>
-      <a href="#">Link 2</a>
-      <a href="#">Link 3</a>
-    </div>
+  <div class="topnav" id="myTopnav">
+    <a href="#login" class="active">Login</a>
+    <a href="#news">Contact</a>
+    <a href="#contact">Home</a>
+    <a href="index.html">Send a message</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
   </div>
-  <a href="#about">About</a>
-  <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
-</div>
-   <div class="title">
-    <h1>WBJS</h1>
-    </div>
-
-    <div class="image">
-        <img src="schoolbadge.png"></img>
-    </div>
-    <div class="button">
-        <button id="play_button" class="button"></button>
-    </div>
-   
+  <div class="container">
     <div id="player-container">
 
     </div>
-
-    <script
-      src="https://code.jquery.com/jquery-3.4.1.min.js"
-      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-      crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/machina@4.0.2/lib/machina.min.js"></script>
+    <div class="title">
+      <h1>Listen</h1>
+      <div class="image">
+        <img src="schoolbadge.png"></img>
+      </div>
+      <div class="button">
+        <button id="play_button" class="button"></button>
+      </div>
+    </div>
+    
+  </div>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/machina@4.0.2/lib/machina.min.js"></script>
 
 </body>
 <script src="listenerpage.js"></script>
