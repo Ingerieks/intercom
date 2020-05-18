@@ -119,10 +119,6 @@ body {
   }
 }
 
-.title {
- 
-
-}
 
 h1 {
     margin-bottom: 0px;
@@ -131,17 +127,23 @@ h1 {
     justify-content: center;
 }
 
+.button-container {
+  padding: 25px;
+}
+
 button {
     
     height: 50px;
     width: 200px;
     font-family: 'Open Sans Condensed', sans-serif;
     font-size: 30px;
+  
 }
 
 .button {
     display: flex;
     justify-content: center;
+    align-self: center;
 }
 
 .send_button {
@@ -161,31 +163,50 @@ button {
 img {
     height: auto;
     width: 50%;
-    margin-top: 20px;
-    margin-bottom: 34px;
+}
+
+#img {
+  height: auto;
+  width: 30%;
 }
 
 .image {
   display: flex;
-  justify-content: center;
     justify-content: center;
+    align-self: center;  
 }
+
+
 
 #player-container {
   width: 220px;
   border-radius: 2rem;
-    justify-self: center;
+}
+
+.audioclip-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 #audio-player {
   padding: 10px;
   width: 200px;
-    display: flex;
-    justify-content: center;
 }
 
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+}
+
+#container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 700px){
+  .container{
+    grid-template-columns: 1fr;
   
+  }
 }

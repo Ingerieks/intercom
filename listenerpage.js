@@ -9,9 +9,9 @@ function myFunction() {
   }
 }
 
-const playButton = document.getElementById("play_button");
+//const playButton = document.getElementById("play_button");
 
-playButton.innerText = playButton.textContent = 'No new messages';
+//playButton.innerText = playButton.textContent = 'No new messages';
 
 const api = "http://localhost:3000";
 
@@ -29,7 +29,6 @@ $.get(api + "/tracks/new", function (tracks) {
   });
 
 });
-
 
 
 // js get new track list on page load jQuery ajax 
