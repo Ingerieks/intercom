@@ -16,16 +16,31 @@ function myFunction() {
 const api = "http://localhost:3000";
 
 $.get(api + "/tracks/new", function (tracks) {
-  
-  tracks.forEach(track => {
+  const tracksContainer = $("#tracks-container");
+
+  tracks.forEach(track => { 
     console.log(track);
+    var trackContainer =  $(document.createElement('div'));
+    trackContainer.addClass("track-container");
+
     var sound = document.createElement('audio');
+
     sound.id = 'audio-player';
     sound.controls = 'controls';
     sound.src = api + track.url;
     sound.type = 'audio/mpeg';
-    document.getElementById('player-container').appendChild(sound);
+    
+    trackContainer.append(sound);
+
+    var dateContainer = $(document.createElement('span'));
+    dateContainer.addClass("date-container");
+    dateContainer.text(track.uploadDate);
+    trackContainer.append(dateContainer);
+    
+    tracksContainer.append(trackContainer);
+
     console.log(sound);
+           
   });
 
 });

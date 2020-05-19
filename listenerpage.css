@@ -178,7 +178,7 @@ img {
 
 
 
-#player-container {
+#tracks-container {
   width: 220px;
   border-radius: 2rem;
 }
@@ -197,6 +197,7 @@ img {
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  height: 500px; 
 }
 
 #container {
