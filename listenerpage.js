@@ -18,9 +18,9 @@ const api = "http://localhost:3000";
 $.get(api + "/tracks/new", function (tracks) {
   const tracksContainer = $("#tracks-container");
 
-  tracks.forEach(track => { 
+  tracks.forEach(track => {
     console.log(track);
-    var trackContainer =  $(document.createElement('div'));
+    var trackContainer = $(document.createElement('div'));
     trackContainer.addClass("track-container");
 
     var sound = document.createElement('audio');
@@ -29,18 +29,32 @@ $.get(api + "/tracks/new", function (tracks) {
     sound.controls = 'controls';
     sound.src = api + track.url;
     sound.type = 'audio/mpeg';
-    
+
     trackContainer.append(sound);
 
     var dateContainer = $(document.createElement('span'));
     dateContainer.addClass("date-container");
-    dateContainer.text(track.uploadDate);
-    trackContainer.append(dateContainer);
+    var uploadDate = Date.parse(track.uploadDate);
+    var config = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    };
     
+    const dateTimeFormat = new Intl.DateTimeFormat('en', config);
+    const [{ value: weekday }, ,{ value: month }, , { value: day }, , { value: year }, , { value: hour }, , { value: minute } ] = dateTimeFormat.formatToParts(uploadDate);
+
+    var dateString = `${weekday} ${day} ${month} ${year} ${hour}:${minute}`;
+    dateContainer.text(dateString);
+    trackContainer.append(dateContainer);
+
     tracksContainer.append(trackContainer);
 
     console.log(sound);
-           
+
   });
 
 });
