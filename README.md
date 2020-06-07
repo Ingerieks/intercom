@@ -17,3 +17,13 @@ Audio autoplay
     Your browser does not support HTML5 audio.
 
 Sound from Zapsplat.com
+
+
+ <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <div id="lower">
+        <input type="checkbox"><label for="checkbox">Keep me logged in</label>
+        <input type="submit" value="Login">
+        </div><!--/ lower-->
+        </form>
+        </div>
