@@ -115,3 +115,10 @@ input[type=submit]:active {
     justify-content: center;
     margin-top: 20px;
 }
+
+#error {
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 12px;
+    margin-left: 10px;
+    color: rgb(163, 8, 8);
+}

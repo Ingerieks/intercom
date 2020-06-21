@@ -5,20 +5,23 @@ function createUserEvent(event) {
     $.ajax({
         type: 'GET',
         url: 'http://localhost:3000/users',
-        data: $.param({ email_address: emailAddress }), 
+        data: $.param({ email_address: emailAddress }),
         dataType: 'json',
-    }).done(function(data) {
-       console.log(data);
-       if ( data.length <= 0 ) {
-         return console.log("no matching user, try again");
-       } else {
-        localStorage.setItem("user-id", data[0].id);
-       };
-       
-    }).fail(function(xhr, status, error){
-       console.log("whoops", xhr, status, error);
+    }).done(function (data) {
+        console.log(data);
+
+        if (data.length <= 0) {
+            const h1 = document.getElementById('error');
+            error.innerHTML = "Check your email address and try again";
+        } else {
+            localStorage.setItem("user-id", data[0].id);
+            window.location = "/listenerpage";
+        };
+
+    }).fail(function (xhr, status, error) {
+        console.log("whoops", xhr, status, error);
     });
-    
+
     event.preventDefault();
 };
 

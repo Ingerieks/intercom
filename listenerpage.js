@@ -12,7 +12,21 @@ function myFunction() {
 //const playButton = document.getElementById("play_button");
 
 //playButton.innerText = playButton.textContent = 'No new messages';
-
+  localStorage.getItem("user-id");
+  console.log(localStorage.getItem("user-id"));
+  
+  function loggingIn() {
+    const userId = localStorage.getItem("user-id");
+    if ( userId !== null ) {
+    const logoutButton = document.getElementById("logout");
+            logoutButton.innerHTML = "Logout";
+    } else {
+      window.location = "/loginpage";
+    };
+  };
+  loggingIn();
+    
+   
 const api = "http://localhost:3000";
 
 $.get(api + "/tracks/new", function (tracks) {
