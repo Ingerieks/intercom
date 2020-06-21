@@ -9,10 +9,16 @@ function createUserEvent(event) {
         dataType: 'json',
     }).done(function(data) {
        console.log(data);
+       if ( data.length <= 0 ) {
+         return console.log("no matching user, try again");
+       } else {
+        localStorage.setItem("user-id", data[0].id);
+       };
+       
     }).fail(function(xhr, status, error){
        console.log("whoops", xhr, status, error);
     });
-
+    
     event.preventDefault();
 };
 
