@@ -14,7 +14,6 @@ function myFunction() {
 //playButton.innerText = playButton.textContent = 'No new messages';
 
 const userId = localStorage.getItem("user-id");
-console.log(userId);
 
 if (userId !== null) {
   const logoutButton = document.getElementById("logout");
@@ -32,7 +31,7 @@ $.get(api + `/users/${userId}/tracks/new`, function (tracks) {
     console.log(track);
     var trackContainer = $(document.createElement('div'));
     trackContainer.addClass("track-container");
-
+    
     var sound = document.createElement('audio');
 
     sound.id = 'audio-player';
@@ -65,15 +64,27 @@ $.get(api + `/users/${userId}/tracks/new`, function (tracks) {
     const clickAway = document.createElement('button');
     $(clickAway).text('X');
     $(clickAway).click((event)=>{
-      alert("here");
-      console.log(event);
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/listened',
+        data: JSON.stringify({ 'userId': userId, "trackId": track.id }), 
+        dataType: 'json',
+        contentType: 'application/json',
+    }).done(function(data) {
+       trackContainer.remove();
+    }).fail(function(xhr, status, error){
+      alert("oops");
+       console.log("whoops", xhr, status, error);
+
+    });
+
+      //console.log(event);
     });
 
     trackContainer.append(clickAway);
 
     tracksContainer.append(trackContainer);
     
-    console.log(sound);
   });
 
 });
