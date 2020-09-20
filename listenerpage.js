@@ -31,20 +31,20 @@ $.get(api + `/users/${userId}/tracks/new`, function (tracks) {
     console.log(track);
     var trackContainer = $(document.createElement('div'));
     trackContainer.addClass("track-container");
-    
+
     var sound = document.createElement('audio');
 
     sound.id = 'audio-player';
     sound.controls = 'controls';
     sound.src = api + track.url;
     sound.type = 'audio/mpeg';
-    
+
 
     trackContainer.append(sound);
 
     var dateContainer = $(document.createElement('span'));
     dateContainer.addClass("date-container");
-    
+
     var uploadDate = Date.parse(track.uploadDate);
     var config = {
       weekday: 'long',
@@ -61,22 +61,23 @@ $.get(api + `/users/${userId}/tracks/new`, function (tracks) {
     var dateString = `${weekday} ${day} ${month} ${year} ${hour}:${minute}`;
     dateContainer.text(dateString);
     trackContainer.append(dateContainer);
-    const clickAway = document.createElement('button');
-    $(clickAway).text('X');
-    $(clickAway).click((event)=>{
+    const clickAway = $(document.createElement('button'));
+    clickAway.addClass("click-away");
+    clickAway.text('X');
+    clickAway.click((event) => {
       $.ajax({
         type: 'POST',
         url: 'http://localhost:3000/listened',
-        data: JSON.stringify({ 'userId': userId, "trackId": track.id }), 
+        data: JSON.stringify({ 'userId': userId, "trackId": track.id }),
         dataType: 'json',
         contentType: 'application/json',
-    }).done(function(data) {
-       trackContainer.remove();
-    }).fail(function(xhr, status, error){
-      alert("oops");
-       console.log("whoops", xhr, status, error);
+      }).done(function (data) {
+        trackContainer.remove();
+      }).fail(function (xhr, status, error) {
+        alert("oops");
+        console.log("whoops", xhr, status, error);
 
-    });
+      });
 
       //console.log(event);
     });
@@ -84,7 +85,7 @@ $.get(api + `/users/${userId}/tracks/new`, function (tracks) {
     trackContainer.append(clickAway);
 
     tracksContainer.append(trackContainer);
-    
+
   });
 
 });

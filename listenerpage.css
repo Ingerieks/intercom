@@ -207,6 +207,7 @@ img {
 
 .date-container {
   font-size: 15px;
+  padding: 10px;
 }
 
 @media (max-width: 700px){
@@ -214,4 +215,10 @@ img {
     grid-template-columns: 1fr;
   
   }
+}
+
+button.click-away {
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
 }
